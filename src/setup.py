@@ -18,5 +18,9 @@ setuptools.setup(
     install_requires=[
         "pre-commit",
         "pyzmq",
+        "pytest",
+        "numpy",
+        "scipy",
+        "matplotlib",
     ],
 )
