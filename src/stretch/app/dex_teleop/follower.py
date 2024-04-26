@@ -50,7 +50,7 @@ if __name__ == "__main__":
         robot_speed, starting_configuration, dt.robot_allowed_to_move, using_stretch_2
     )
 
-    loop_timer = lt.LoopStats()
+    loop_timer = lt.LoopStats("dex_teleop_follower")
     print_timing = False
     print_goal = False
 
@@ -65,13 +65,13 @@ if __name__ == "__main__":
     goal_recv_socket.connect(goal_recv_address)
 
     while True:
-        loop_timer.start_of_iteration()
+        loop_timer.mark_start()
         goal_dict = goal_recv_socket.recv_pyobj()
         if goal_dict:
             if print_goal:
                 print("goal_dict =")
                 pp.pprint(goal_dict)
             gripper_to_goal.update_goal(**goal_dict)
-        loop_timer.end_of_iteration()
+        loop_timer.mark_end()
         if print_timing:
             loop_timer.pretty_print()
