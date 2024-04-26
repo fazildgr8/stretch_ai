@@ -24,6 +24,9 @@ from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 from stretch.app.dex_teleop.leader import use_gripper_center
 from stretch.utils.geometry import get_rotation_from_xyz
 
+from stretch.app.dex_teleop.leader import use_gripper_center
+from stretch.utils.geometry import get_rotation_from_xyz
+
 
 def load_urdf(file_name):
     if not os.path.isfile(file_name):

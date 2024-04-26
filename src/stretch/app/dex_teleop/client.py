@@ -31,6 +31,7 @@ class RobotClient:
             print(f"{name=}  RobotClient.__init__")
 
         self.name = name
+
         d405_context = zmq.Context()
         d405_socket = d405_context.socket(zmq.SUB)
         d405_socket.setsockopt(zmq.SUBSCRIBE, b"")
