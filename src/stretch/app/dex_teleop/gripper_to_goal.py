@@ -14,15 +14,15 @@ from hello_helpers import hello_misc as hm
 from scipy.spatial.transform import Rotation
 from stretch_body.robot_params import RobotParams
 
-import stretch_ai.motion.simple_ik as si
-import stretch_ai.servo.robot_move as rm
-import stretch_ai.teleop.dex_teleop_parameters as dt
-import stretch_ai.utils.loop_timer as lt
-from stretch_ai.motion.pinocchio_ik_solver import PinocchioIKSolver
+import stretch.motion.simple_ik as si
+import stretch.app.dex_teleop.robot_move as rm
+import stretch.app.dex_teleop.dex_teleop_parameters as dt
+import stretch.utils.loop_timer as lt
+from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 
 # This tells us if we are using the gripper center for control or not
-from stretch_ai.teleop.leader import use_gripper_center
-from stretch_ai.utils.rotation import get_rotation_from_xyz
+from stretch.app.dex_teleop.leader import use_gripper_center
+from stretch.utils.geometry import get_rotation_from_xyz
 
 
 def load_urdf(file_name):
