@@ -53,7 +53,7 @@ def main(use_remote_computer, d405_port, exposure, scaling, gamma):
             address = "tcp://*:" + str(d405_port)
         else:
             address = "tcp://" + "127.0.0.1" + ":" + str(d405_port)
-            a
+
         socket.bind(address)
 
         loop_timer = lt.LoopTimer()
