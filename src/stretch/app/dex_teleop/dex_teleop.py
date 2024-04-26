@@ -9,7 +9,7 @@ import pprint as pp
 import loop_timer as lt
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     args = dt.get_arg_parser().parse_args()
     use_fastest_mode = args.fast
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     left_handed = args.left
     using_stretch_2 = args.stretch_2
     slide_lift_range = args.slide_lift_range
-        
+
     # The 'default', 'slow', 'fast', and 'max' options are defined by
     # Hello Robot. The 'fastest_stretch_2' option has been specially tuned for
     # this application.
@@ -26,52 +26,57 @@ if __name__ == '__main__':
     # the factory 'max' values defined by Hello Robot.
     if use_fastest_mode:
         if using_stretch_2:
-            robot_speed = 'fastest_stretch_2'
-        else: 
-            robot_speed = 'fastest_stretch_3'
+            robot_speed = "fastest_stretch_2"
+        else:
+            robot_speed = "fastest_stretch_3"
     else:
-        robot_speed = 'slow'
-    print('running with robot_speed =', robot_speed)
+        robot_speed = "slow"
+    print("running with robot_speed =", robot_speed)
 
     lift_middle = dt.get_lift_middle(manipulate_on_ground)
     center_configuration = dt.get_center_configuration(lift_middle)
     starting_configuration = dt.get_starting_configuration(lift_middle)
-    
-    if left_handed: 
-        webcam_aruco_detector = wt.WebcamArucoDetector(tongs_prefix='left', visualize_detections=False)
+
+    if left_handed:
+        webcam_aruco_detector = wt.WebcamArucoDetector(
+            tongs_prefix="left", visualize_detections=False
+        )
     else:
-        webcam_aruco_detector = wt.WebcamArucoDetector(tongs_prefix='right', visualize_detections=False)
-    
+        webcam_aruco_detector = wt.WebcamArucoDetector(
+            tongs_prefix="right", visualize_detections=False
+        )
+
     # Initialize IK
     simple_ik = si.SimpleIK()
 
     # Define the center position for the wrist that corresponds with
-    #the teleop origin.
+    # the teleop origin.
     center_wrist_position = simple_ik.fk_rotary_base(center_configuration)
 
-    gripper_to_goal = gg.GripperToGoal(robot_speed, starting_configuration, dt.robot_allowed_to_move, using_stretch_2)
+    gripper_to_goal = gg.GripperToGoal(
+        robot_speed, starting_configuration, dt.robot_allowed_to_move, using_stretch_2
+    )
 
-    goal_from_markers = gt.GoalFromMarkers(dt.teleop_origin, center_wrist_position, slide_lift_range=slide_lift_range)
-
+    goal_from_markers = gt.GoalFromMarkers(
+        dt.teleop_origin, center_wrist_position, slide_lift_range=slide_lift_range
+    )
 
     loop_timer = lt.LoopTimer()
     print_timing = False
     print_goal = False
-    
+
     while True:
         loop_timer.start_of_iteration()
         markers = webcam_aruco_detector.process_next_frame()
         goal_dict = goal_from_markers.get_goal_dict(markers)
         if goal_dict:
             if print_goal:
-                print('goal_dict =')
+                print("goal_dict =")
                 pp.pprint(goal_dict)
             gripper_to_goal.update_goal(**goal_dict)
         loop_timer.end_of_iteration()
-        if print_timing: 
+        if print_timing:
             loop_timer.pretty_print()
-
-
 
 
 ##############################################################
@@ -181,7 +186,7 @@ if __name__ == '__main__':
 #     + : down
 
 # wrist roll
-#     - : 
+#     - :
 #     0 : horizontal
 #     + :
 #

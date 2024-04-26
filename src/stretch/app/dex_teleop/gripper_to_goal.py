@@ -287,12 +287,12 @@ class GripperToGoal:
                 * self.filtered_wrist_position_configuration
             ) + (self.wrist_position_filter * new_wrist_position_configuration)
 
-            new_goal_configuration[
-                "joint_lift"
-            ] = self.filtered_wrist_position_configuration[1]
-            new_goal_configuration[
-                "joint_arm_l0"
-            ] = self.filtered_wrist_position_configuration[2]
+            new_goal_configuration["joint_lift"] = (
+                self.filtered_wrist_position_configuration[1]
+            )
+            new_goal_configuration["joint_arm_l0"] = (
+                self.filtered_wrist_position_configuration[2]
+            )
 
             if self._use_simple_gripper_rules:
                 self.simple_ik.clip_with_joint_limits(new_goal_configuration)
@@ -408,15 +408,15 @@ class GripperToGoal:
                     * self.filtered_wrist_orientation
                 ) + (self.wrist_orientation_filter * new_wrist_orientation)
 
-                new_goal_configuration[
-                    "joint_wrist_yaw"
-                ] = self.filtered_wrist_orientation[0]
-                new_goal_configuration[
-                    "joint_wrist_pitch"
-                ] = self.filtered_wrist_orientation[1]
-                new_goal_configuration[
-                    "joint_wrist_roll"
-                ] = self.filtered_wrist_orientation[2]
+                new_goal_configuration["joint_wrist_yaw"] = (
+                    self.filtered_wrist_orientation[0]
+                )
+                new_goal_configuration["joint_wrist_pitch"] = (
+                    self.filtered_wrist_orientation[1]
+                )
+                new_goal_configuration["joint_wrist_roll"] = (
+                    self.filtered_wrist_orientation[2]
+                )
 
                 self.prev_commanded_wrist_orientation = {
                     "joint_wrist_yaw": self.filtered_wrist_orientation[0],
@@ -440,9 +440,9 @@ class GripperToGoal:
             # Compute base rotation to reach the position determined by the IK solver
             # Else we will just use the computed value from IK for now to see if that works
             if self._use_simple_gripper_rules:
-                new_goal_configuration[
-                    "joint_mobile_base_rotation"
-                ] = self.filtered_wrist_position_configuration[0]
+                new_goal_configuration["joint_mobile_base_rotation"] = (
+                    self.filtered_wrist_position_configuration[0]
+                )
             else:
                 # Clear this, let us rotate freely
                 current_mobile_base_angle = 0
