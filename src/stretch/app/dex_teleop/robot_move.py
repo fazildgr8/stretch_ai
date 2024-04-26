@@ -4,6 +4,9 @@ import stretch_body.robot as rb
 from stretch_body.robot_params import RobotParams
 
 
+# TODO: delete this class!
+
+
 class RobotMove:
     def __init__(self, robot, speed="default"):
 

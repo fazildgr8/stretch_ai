@@ -7,7 +7,7 @@ import numpy as np
 import zmq
 
 import stretch.motion.simple_ik as si
-import stretch.dex_teleop.gripper_to_goal as gg
+import stretch.app.dex_teleop.gripper_to_goal as gg
 import stretch.app.dex_teleop.dex_teleop_parameters as dt
 import stretch.utils.loop_stats as lt
 

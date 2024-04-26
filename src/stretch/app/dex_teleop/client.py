@@ -8,8 +8,8 @@ import cv2
 import numpy as np
 import zmq
 
-import stretch_ai.utils.loop_timer as lt
-from stretch_ai.base import Evaluator
+import stretch.utils.loop_stats as lt
+from stretch.core import Evaluator
 
 
 class RobotClient:
@@ -48,7 +48,7 @@ class RobotClient:
     def run(self, evaluator: Evaluator = None):
         """Run the client. Optionally pass in an eval function."""
 
-        loop_timer = lt.LoopTimer()
+        loop_timer = lt.LoopStats()
 
         try:
             start_time = time.time()
