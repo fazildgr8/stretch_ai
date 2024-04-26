@@ -5,14 +5,15 @@ import numpy as np
 import zmq
 from scipy.spatial.transform import Rotation
 
-import stretch_ai.motion.simple_ik as si
-import stretch_ai.teleop.dex_teleop_parameters as dt
-import stretch_ai.teleop.goal_from_teleop as gt
-import stretch_ai.teleop.webcam_teleop_interface as wt
-from stretch_ai.base import Evaluator
-from stretch_ai.servo.client import RobotClient
-from stretch_ai.teleop.record import FileDataRecorder
-from stretch_ai.utils.rotation import get_rotation_from_xyz
+import stretch.motion.simple_ik as si
+from stretch.core import Evaluator
+from stretch.utils.data_tools.record import FileDataRecorder
+from stretch.utils.geometry import get_rotation_from_xyz
+
+from stretch.app.dex_teleop.client import RobotClient
+import stretch.app.dex_teleop.dex_teleop_parameters as dt
+import stretch.app.dex_teleop.goal_from_teleop as gt
+import stretch.app.dex_teleop.webcam_teleop_interface as wt
 
 use_gripper_center = True
 
