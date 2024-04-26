@@ -17,7 +17,7 @@ from stretch_body.robot_params import RobotParams
 import stretch.motion.simple_ik as si
 import stretch.app.dex_teleop.robot_move as rm
 import stretch.app.dex_teleop.dex_teleop_parameters as dt
-import stretch.utils.loop_timer as lt
+import stretch.utils.loop_stats as lt
 from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 
 # This tells us if we are using the gripper center for control or not
@@ -578,12 +578,12 @@ if __name__ == "__main__":
 
     print("Ready to go")
     loop_timer = lt.LoopTimer()
-    print_timing = True
+    print_timing = False
     first_goal_received = False
 
     try:
         while True:
-            loop_timer.start_of_iteration()
+            loop_timer.mark_start()
 
             print("Commanded goal =")
             pp.pp(goal_dict)
@@ -624,7 +624,7 @@ if __name__ == "__main__":
                     first_goal_received = True
 
             time.sleep(0.03)
-            loop_timer.end_of_iteration()
+            loop_timer.mark_end()
             if print_timing:
                 loop_timer.pretty_print()
     finally:
