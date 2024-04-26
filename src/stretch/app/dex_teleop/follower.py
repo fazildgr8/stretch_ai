@@ -6,10 +6,10 @@ import pprint as pp
 import numpy as np
 import zmq
 
-import stretch_ai.motion.simple_ik as si
-import stretch_ai.servo.gripper_to_goal as gg
-import stretch_ai.teleop.dex_teleop_parameters as dt
-import stretch_ai.utils.loop_timer as lt
+import stretch.motion.simple_ik as si
+import stretch.dex_teleop.gripper_to_goal as gg
+import stretch.app.dex_teleop.dex_teleop_parameters as dt
+import stretch.utils.loop_stats as lt
 
 if __name__ == "__main__":
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         robot_speed, starting_configuration, dt.robot_allowed_to_move, using_stretch_2
     )
 
-    loop_timer = lt.LoopTimer()
+    loop_timer = lt.LoopStats()
     print_timing = False
     print_goal = False
 
