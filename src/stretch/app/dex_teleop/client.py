@@ -78,7 +78,7 @@ class RobotClient:
                 # TODO: we might want to change this code path to something a bit better.
                 results = evaluator.apply(color_image, depth_image)
 
-                loop_timer.end_of_iteration()
+                loop_timer.mark_end()
                 if self.verbose:
                     loop_timer.pretty_print()
 
