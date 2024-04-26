@@ -28,7 +28,7 @@ import numpy as np
 import pathlib
 import os
 import urchin as urdf_loader
-import simple_ik_equations_numba as ie
+import stretch.motion.simple_ik_equations_numba as ie
 
 
 def load_urdf(file_name):

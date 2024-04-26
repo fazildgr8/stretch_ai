@@ -21,13 +21,16 @@ class RobotClient:
         robot_ip: Optional[str] = None,
         d405_port: int = 4405,
         verbose: bool = False,
+        name: str = "robot_client",
     ):
         self.verbose = verbose
         if verbose:
             print("cv2.__version__ =", cv2.__version__)
             print("cv2.__path__ =", cv2.__path__)
             print("sys.version =", sys.version)
+            print(f"{name=}  RobotClient.__init__")
 
+        self.name = name
         d405_context = zmq.Context()
         d405_socket = d405_context.socket(zmq.SUB)
         d405_socket.setsockopt(zmq.SUBSCRIBE, b"")
@@ -48,7 +51,7 @@ class RobotClient:
     def run(self, evaluator: Evaluator = None):
         """Run the client. Optionally pass in an eval function."""
 
-        loop_timer = lt.LoopStats()
+        loop_timer = lt.LoopStats(self.name)
 
         try:
             start_time = time.time()
@@ -57,7 +60,7 @@ class RobotClient:
 
             while True:
 
-                loop_timer.start_of_iteration()
+                loop_timer.mark_start()
 
                 d405_output = self.d405_socket.recv_pyobj()
                 color_image = d405_output["color_image"]

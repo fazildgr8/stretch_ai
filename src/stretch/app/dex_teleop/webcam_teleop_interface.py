@@ -56,7 +56,7 @@ class WebcamArucoDetector:
 
         self.marker_info = {}
         aruco_marker_info_file_name = (
-            "./config/teleop_aruco_marker_info_" + dt.tongs_to_use + ".yaml"
+            "./configs/app/dex_teleop/teleop_aruco_marker_info_" + dt.tongs_to_use + ".yaml"
         )
         with open(aruco_marker_info_file_name) as f:
             self.marker_info = yaml.load(f, Loader=SafeLoader)
