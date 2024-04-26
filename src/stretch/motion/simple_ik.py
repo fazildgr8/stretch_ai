@@ -22,6 +22,7 @@
 # dual licensing, please contact Hello Robot Inc.
 ###########################################################################
 
+import errno
 import time
 import math
 import numpy as np
