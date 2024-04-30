@@ -44,3 +44,11 @@ python -m stretch.app.dex_teleop.leader --task grasp_cup --user Chris --env Chri
 
 Collect a few demonstrations per example task/environment that you want to test in.
 
+#### Data Collection
+
+The robot will start as soon as the Dex Teleop tool is visible! However, it will not start recording until you initiate data collection with the keyboard using the `space` key. This allows you to put the arm in a reasonable position to learn your skill.
+
+#### Keyboard Controls
+
+  - Press `space`: start/stop recording a demonstration. It will be written to a file based on the provided task, user, and environment, with a subfolder based on the date and time.
+  - Press `esc`: quit the program.
