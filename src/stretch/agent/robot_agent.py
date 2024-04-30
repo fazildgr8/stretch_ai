@@ -30,6 +30,7 @@ from stretch.mapping.voxel import (
 from stretch.motion import ConfigurationSpace, PlanResult
 from stretch.motion.algo import RRTConnect, Shortcut, SimplifyXYT
 from stretch.perception.encoders import get_encoder
+from stretch.perception import OvmmPerception
 from stretch.utils.threading import Interval
 
 
@@ -114,8 +115,8 @@ class RobotAgent:
     def __init__(
         self,
         robot: RobotClient,
-        semantic_sensor,
         parameters: Dict[str, Any],
+        semantic_sensor: Optional[OvmmPerception] = None,
         grasp_client: Optional[GraspClient] = None,
         voxel_map: Optional[SparseVoxelMap] = None,
         rpc_stub=None,
@@ -563,8 +564,10 @@ class RobotAgent:
         self.obs_history.append(obs)
         self.obs_count += 1
         obs_count = self.obs_count
-        # Semantic prediction
-        obs = self.semantic_sensor.predict(obs)
+        # Optionally do this
+        if self.semantic_sensor is not None:
+            # Semantic prediction
+            obs = self.semantic_sensor.predict(obs)
         self.voxel_map.add_obs(obs)
         # Add observation - helper function will unpack it
         if visualize_map:
@@ -769,6 +772,10 @@ class RobotAgent:
 
     def print_found_classes(self, goal: Optional[str] = None):
         """Helper. print out what we have found according to detic."""
+        if self.semantic_sensor is None:
+            logger.warn("Tried to print classes without semantic sensor!")
+            return
+
         instances = self.voxel_map.get_instances()
         if goal is not None:
             print(f"Looking for {goal}.")
