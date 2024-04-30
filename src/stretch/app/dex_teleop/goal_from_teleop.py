@@ -8,6 +8,8 @@ import os
 
 
 class GoalFromMarkers:
+    """Compute a goal based on the locations of detected aruco markers."""
+
     def __init__(
         self, teleop_origin, initial_center_wrist_position, slide_lift_range=False
     ):
@@ -168,9 +170,9 @@ class GoalFromMarkers:
                             teleop_marker_position_in_camera_frame[
                                 2
                             ] = self.slide_lift_range_down
-                            teleop_marker_position_in_camera_frame[2] = (
-                                self.slide_lift_range_down
-                            )
+                            teleop_marker_position_in_camera_frame[
+                                2
+                            ] = self.slide_lift_range_down
                         elif dist_from_camera > self.slide_lift_range_up:
                             self.lift_range_offset = (
                                 self.lift_range_offset

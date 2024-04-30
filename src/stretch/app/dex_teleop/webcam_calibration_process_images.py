@@ -24,7 +24,9 @@ def main():
     num_images_to_collect = 60
     time_between_images_sec = 0.5
 
-    image_directory = wc.get_calibration_directory(camera_name, image_width, image_height)
+    image_directory = wc.get_calibration_directory(
+        camera_name, image_width, image_height
+    )
     image_base_name = "webcam_calibration_image"
 
     file_name_pattern = image_directory + image_base_name + "_*.png"
@@ -43,13 +45,14 @@ def main():
 
     detector_parameters = aruco.DetectorParameters()
     refine_parameters = aruco.RefineParameters()
-    aruco_detector = aruco.ArucoDetector(aruco_dict, detector_parameters, refine_parameters)
+    aruco_detector = aruco.ArucoDetector(
+        aruco_dict, detector_parameters, refine_parameters
+    )
 
     charuco_parameters = aruco.CharucoParameters()
     charuco_detector = aruco.CharucoDetector(
         aruco_board, charuco_parameters, detector_parameters, refine_parameters
     )
-
 
     for f in file_names:
         color_image = cv2.imread(f)
@@ -66,9 +69,12 @@ def main():
             )
             exit()
 
-        charuco_corners, charuco_ids, marker_corners, marker_ids = (
-            charuco_detector.detectBoard(color_image)
-        )
+        (
+            charuco_corners,
+            charuco_ids,
+            marker_corners,
+            marker_ids,
+        ) = charuco_detector.detectBoard(color_image)
 
         print("filename =", f)
 
@@ -110,7 +116,9 @@ def main():
                     print("********************************")
                     print()
 
-                aruco.drawDetectedCornersCharuco(color_image, charuco_corners, charuco_ids)
+                aruco.drawDetectedCornersCharuco(
+                    color_image, charuco_corners, charuco_ids
+                )
 
         cv2.imshow("Detected Charuco Corners", color_image)
         cv2.waitKey(1)
@@ -123,7 +131,6 @@ def main():
     print("number of images with suitable points =", len(images_used_for_calibration))
     print("len(all_object_points) =", len(all_object_points))
     print("len(all_image_points) =", len(all_image_points))
-
 
     (
         projection_error,
@@ -165,5 +172,6 @@ def main():
     print("saved calibration results to", results_file_name)
     print()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
