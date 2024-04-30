@@ -115,3 +115,6 @@ ENV/
 
 # URDF files
 *.urdf
+
+# Webcam calibration images
+webcam_calibration_images/
