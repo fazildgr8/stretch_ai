@@ -77,7 +77,9 @@ class ArucoMarker:
 
         # Convert ArUco position estimate to be in meters.
         self.aruco_position = tvecs[0][0] / 1000.0
-        aruco_depth_estimate = self.aruco_position[2]
+
+        # TODO: do we need this depth estimate?
+        # aruco_depth_estimate = self.aruco_position[2]
 
         self.marker_position = self.aruco_position
         R = np.identity(4)
@@ -103,7 +105,7 @@ class ArucoMarker:
         # return copy of marker_info
         return self.info.copy()
 
-    def get_marker_poly(self):
+    def get_marker_poly(self, corners):
         poly_points = np.array(corners)
         poly_points = np.round(poly_points).astype(np.int32)
         return poly_points

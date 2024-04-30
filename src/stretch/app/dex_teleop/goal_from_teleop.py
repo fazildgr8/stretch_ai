@@ -168,6 +168,9 @@ class GoalFromMarkers:
                             teleop_marker_position_in_camera_frame[
                                 2
                             ] = self.slide_lift_range_down
+                            teleop_marker_position_in_camera_frame[2] = (
+                                self.slide_lift_range_down
+                            )
                         elif dist_from_camera > self.slide_lift_range_up:
                             self.lift_range_offset = (
                                 self.lift_range_offset

@@ -22,12 +22,15 @@
 # dual licensing, please contact Hello Robot Inc.
 ###########################################################################
 
-import time
+import errno
 import math
-import numpy as np
-import pathlib
 import os
+import pathlib
+import time
+
+import numpy as np
 import urchin as urdf_loader
+
 import stretch.motion.simple_ik_equations_numba as ie
 
 

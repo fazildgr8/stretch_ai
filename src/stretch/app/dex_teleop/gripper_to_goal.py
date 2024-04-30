@@ -1,5 +1,6 @@
 import math
 import os
+import errno
 import pprint as pp
 import time
 import timeit
@@ -17,7 +18,7 @@ from stretch_body.robot_params import RobotParams
 import stretch.motion.simple_ik as si
 import stretch.app.dex_teleop.robot_move as rm
 import stretch.app.dex_teleop.dex_teleop_parameters as dt
-import stretch.utils.loop_timer as lt
+import stretch.utils.loop_stats as lt
 from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 
 # This tells us if we are using the gripper center for control or not
@@ -287,12 +288,12 @@ class GripperToGoal:
                 * self.filtered_wrist_position_configuration
             ) + (self.wrist_position_filter * new_wrist_position_configuration)
 
-            new_goal_configuration[
-                "joint_lift"
-            ] = self.filtered_wrist_position_configuration[1]
-            new_goal_configuration[
-                "joint_arm_l0"
-            ] = self.filtered_wrist_position_configuration[2]
+            new_goal_configuration["joint_lift"] = (
+                self.filtered_wrist_position_configuration[1]
+            )
+            new_goal_configuration["joint_arm_l0"] = (
+                self.filtered_wrist_position_configuration[2]
+            )
 
             if self._use_simple_gripper_rules:
                 self.simple_ik.clip_with_joint_limits(new_goal_configuration)
@@ -408,15 +409,15 @@ class GripperToGoal:
                     * self.filtered_wrist_orientation
                 ) + (self.wrist_orientation_filter * new_wrist_orientation)
 
-                new_goal_configuration[
-                    "joint_wrist_yaw"
-                ] = self.filtered_wrist_orientation[0]
-                new_goal_configuration[
-                    "joint_wrist_pitch"
-                ] = self.filtered_wrist_orientation[1]
-                new_goal_configuration[
-                    "joint_wrist_roll"
-                ] = self.filtered_wrist_orientation[2]
+                new_goal_configuration["joint_wrist_yaw"] = (
+                    self.filtered_wrist_orientation[0]
+                )
+                new_goal_configuration["joint_wrist_pitch"] = (
+                    self.filtered_wrist_orientation[1]
+                )
+                new_goal_configuration["joint_wrist_roll"] = (
+                    self.filtered_wrist_orientation[2]
+                )
 
                 self.prev_commanded_wrist_orientation = {
                     "joint_wrist_yaw": self.filtered_wrist_orientation[0],
@@ -440,9 +441,9 @@ class GripperToGoal:
             # Compute base rotation to reach the position determined by the IK solver
             # Else we will just use the computed value from IK for now to see if that works
             if self._use_simple_gripper_rules:
-                new_goal_configuration[
-                    "joint_mobile_base_rotation"
-                ] = self.filtered_wrist_position_configuration[0]
+                new_goal_configuration["joint_mobile_base_rotation"] = (
+                    self.filtered_wrist_position_configuration[0]
+                )
             else:
                 # Clear this, let us rotate freely
                 current_mobile_base_angle = 0
@@ -578,12 +579,12 @@ if __name__ == "__main__":
 
     print("Ready to go")
     loop_timer = lt.LoopTimer()
-    print_timing = True
+    print_timing = False
     first_goal_received = False
 
     try:
         while True:
-            loop_timer.start_of_iteration()
+            loop_timer.mark_start()
 
             print("Commanded goal =")
             pp.pp(goal_dict)
@@ -624,7 +625,7 @@ if __name__ == "__main__":
                     first_goal_received = True
 
             time.sleep(0.03)
-            loop_timer.end_of_iteration()
+            loop_timer.mark_end()
             if print_timing:
                 loop_timer.pretty_print()
     finally:
