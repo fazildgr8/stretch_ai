@@ -399,7 +399,7 @@ class WebcamArucoDetector:
                 else:
                     print(
                         "WebcamArucoDetector.process_tongs: front marker bisector_length <= 0.01 so not returning a marker. bisector_length =",
-                        bisector_length,
+                        z_bisector_length,
                     )
                     return None
 

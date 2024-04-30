@@ -83,7 +83,7 @@ def idealized_ik_with_rotary_base(wrist_position, b1):
     # arm (alpha)
     A = math.sqrt(x ** 2 + y ** 2 - b1 ** 2)
     # base rotation (theta)
-    T = -2 * math.atan((a + y) / (b1 - x))
+    T = -2 * math.atan((A + y) / (b1 - x))
 
     return (T, L, A)
 
