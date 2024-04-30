@@ -112,3 +112,6 @@ ENV/
 *.swp
 *.swn
 *.swo
+
+# URDF files
+*.urdf
