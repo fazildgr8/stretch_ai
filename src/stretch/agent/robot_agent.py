@@ -30,7 +30,6 @@ from stretch.mapping.voxel import (
 from stretch.motion import ConfigurationSpace, PlanResult
 from stretch.motion.algo import RRTConnect, Shortcut, SimplifyXYT
 from stretch.perception.encoders import get_encoder
-from stretch.perception import OvmmPerception
 from stretch.utils.threading import Interval
 
 
@@ -44,7 +43,7 @@ class RobotAgent:
         self,
         robot: RobotClient,
         parameters: Dict[str, Any],
-        semantic_sensor: Optional[OvmmPerception] = None,
+        semantic_sensor: Optional = None,
         grasp_client: Optional[GraspClient] = None,
         voxel_map: Optional[SparseVoxelMap] = None,
         rpc_stub=None,
