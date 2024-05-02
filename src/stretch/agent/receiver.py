@@ -12,16 +12,13 @@ import numpy as np
 import zmq
 from loguru import logger
 
-from home_robot.core.interfaces import ContinuousNavigationAction, Observations
-from home_robot.core.robot import RobotClient
-from home_robot.motion.robot import RobotModel
-from home_robot.motion.stretch import HelloStretchKinematics
-from home_robot.utils.geometry import angle_difference
-from home_robot.utils.image import Camera
-from home_robot.utils.point_cloud import show_point_cloud
-
-# import faulthandler
-# faulthandler.enable()
+from stretch.core.interfaces import ContinuousNavigationAction, Observations
+from stretch.core.robot import RobotClient
+from stretch.motion.robot import RobotModel
+from stretch.motion.stretch import HelloStretchKinematics
+from stretch.utils.geometry import angle_difference
+from stretch.utils.image import Camera
+from stretch.utils.point_cloud import show_point_cloud
 
 
 class HomeRobotZmqClient(RobotClient):
