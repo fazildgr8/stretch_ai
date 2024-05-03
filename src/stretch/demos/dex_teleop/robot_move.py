@@ -3,7 +3,6 @@ from functools import partial
 import stretch_body.robot as rb
 from stretch_body.robot_params import RobotParams
 
-
 # TODO: delete this class!
 
 
@@ -66,7 +65,7 @@ class RobotMove:
                         "stretch_gripper": ("stretch_gripper", {"v_r": 12, "a_r": 18}),
                     }
                 elif speed == "fastest_stretch_3":
-                    #'joint_lift': (None, {'v_m': 0.13, 'a_m': 1.0}),
+                    # 'joint_lift': (None, {'v_m': 0.13, 'a_m': 1.0}),
                     custom_parameters = {
                         "joint_mobile_base_rotate_by": (None, {"v_r": 0.3, "a_r": 0.5}),
                         "joint_lift": (None, {"v_m": 0.2, "a_m": 1.0}),
@@ -111,9 +110,10 @@ class RobotMove:
                 lift_v = lift_speed["vel_m"]
                 lift_a = lift_speed["accel_m"]
 
-                arm_speed = self.params["arm"]["motion"][speed]
-                arm_v = arm_speed["vel_m"]
-                arm_a = arm_speed["accel_m"]
+                # TODO: unused variables -d do we need these for anything
+                # arm_speed = self.params["arm"]["motion"][speed]
+                # arm_v = arm_speed["vel_m"]
+                # arm_a = arm_speed["accel_m"]
 
                 yaw_speed = self.params["wrist_yaw"]["motion"][speed]
                 yaw_v = yaw_speed["vel"]

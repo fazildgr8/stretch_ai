@@ -1,5 +1,6 @@
-import numpy as np
 import argparse
+
+import numpy as np
 
 
 def get_arg_parser():
@@ -48,7 +49,7 @@ def get_arg_parser():
 
 
 # Measurements for the tongs
-tongs_to_use = "56mm"  #'50mm' #'44mm'
+tongs_to_use = "56mm"  # '50mm' #'44mm'
 
 if tongs_to_use == "56mm":
     # 50mm ArUco marker tongs
@@ -189,12 +190,10 @@ def get_lift_middle(manipulate_on_ground):
     # limits. These can only be more restrictive than the URDF joint
     # limits.
     if manipulate_on_ground:
-        lift_minimum = None
-        lift_maximum = max_tongs_height_range
+        # lift_maximum = max_tongs_height_range
         lift_middle = max_tongs_height_range / 2.0
     else:
         lift_minimum = 1.09 - max_tongs_height_range
-        lift_maximum = None
         lift_middle = lift_minimum + max_tongs_height_range / 2.0
     return lift_middle
 

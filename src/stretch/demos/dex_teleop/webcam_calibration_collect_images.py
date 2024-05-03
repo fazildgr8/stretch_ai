@@ -1,9 +1,9 @@
-import cv2
-import time
 import subprocess
+import time
 from pathlib import Path
-import webcam as wc
 
+import cv2
+import webcam as wc
 
 camera_name = "Logitech Webcam C930e"
 image_width = 1920

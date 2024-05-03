@@ -3,10 +3,9 @@ import time
 
 import cv2
 import numpy as np
-import zmq
-
 import stretch_ai.servo.d405_helpers as dh
 import stretch_ai.utils.loop_timer as lt
+import zmq
 from stretch_ai.utils.image import adjust_gamma
 
 
@@ -58,11 +57,7 @@ def main(use_remote_computer, d405_port, exposure, scaling, gamma):
 
         loop_timer = lt.LoopTimer()
 
-        # adaptive_equalization = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-        # adaptive_equalization.apply(gray_image)
-
-        start_time = time.time()
-        iterations = 0
+        # Run in a loop, get images and publish them.
         while True:
             loop_timer.start_of_iteration()
 
@@ -113,7 +108,6 @@ def main(use_remote_computer, d405_port, exposure, scaling, gamma):
             if brighten_image:
                 color_image = autoAdjustments_with_convertScaleAbs(color_image)
 
-            image = color_image
             camera_info = color_camera_info
 
             d405_output["color_image"] = color_image

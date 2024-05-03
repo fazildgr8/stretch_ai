@@ -7,13 +7,12 @@ from copy import deepcopy
 
 import cv2
 import numpy as np
-import yaml
-from scipy.spatial.transform import Rotation
-from yaml.loader import SafeLoader
-
 import stretch_ai.teleop.dex_teleop_parameters as dt
 import stretch_ai.teleop.teleop_aruco_detector as ad
 import stretch_ai.teleop.webcam as wc
+import yaml
+from scipy.spatial.transform import Rotation
+from yaml.loader import SafeLoader
 
 
 def pixel_from_3d(xyz, camera_info):
@@ -305,12 +304,10 @@ class WebcamArucoDetector:
                 left_pos = tongs_left_bottom_marker["pos"].copy()
                 left_y_axis = tongs_left_bottom_marker["y_axis"].copy()
                 left_x_axis = tongs_left_bottom_marker["x_axis"].copy()
-                left_min_dist = tongs_left_bottom_marker["min_dist_between_corners"]
 
                 right_pos = tongs_right_bottom_marker["pos"].copy()
                 right_y_axis = tongs_right_bottom_marker["y_axis"].copy()
                 right_x_axis = tongs_right_bottom_marker["x_axis"].copy()
-                right_min_dist = tongs_right_bottom_marker["min_dist_between_corners"]
 
                 grip_width = np.linalg.norm(right_pos - left_pos)
 
@@ -354,13 +351,11 @@ class WebcamArucoDetector:
                 left_z_axis = tongs_left_front_marker["z_axis"].copy()
                 left_y_axis = tongs_left_front_marker["y_axis"].copy()
                 left_x_axis = tongs_left_front_marker["x_axis"].copy()
-                left_min_dist = tongs_left_front_marker["min_dist_between_corners"]
 
                 right_pos = tongs_right_front_marker["pos"].copy()
                 right_z_axis = tongs_right_front_marker["z_axis"].copy()
                 right_y_axis = tongs_right_front_marker["y_axis"].copy()
                 right_x_axis = tongs_right_front_marker["x_axis"].copy()
-                right_min_dist = tongs_right_front_marker["min_dist_between_corners"]
 
                 # Adjust positions to match bottom marker positions
                 half_cube_side = self.cube_side / 2.0
@@ -416,13 +411,11 @@ class WebcamArucoDetector:
                 left_y_axis = tongs_left_top_marker["y_axis"].copy()
                 left_x_axis = tongs_left_top_marker["x_axis"].copy()
                 left_z_axis = tongs_left_top_marker["z_axis"].copy()
-                left_min_dist = tongs_left_top_marker["min_dist_between_corners"]
 
                 right_pos = tongs_right_top_marker["pos"].copy()
                 right_y_axis = tongs_right_top_marker["y_axis"].copy()
                 right_x_axis = tongs_right_top_marker["x_axis"].copy()
                 right_z_axis = tongs_right_top_marker["z_axis"].copy()
-                right_min_dist = tongs_right_top_marker["min_dist_between_corners"]
 
                 grip_width = np.linalg.norm(right_pos - left_pos)
 
@@ -507,14 +500,9 @@ class WebcamArucoDetector:
         return virtual_marker
 
     def process_next_frame(self):
+        """Get next frame from webcam and use it to detect markers."""
 
         color_image, color_camera_info = self.webcam.get_next_frame()
-
-        # print('color_image.shape =', color_image.shape)
-
-        depth_image = None
-        depth_camera_info = color_camera_info
-        depth_scale = 1.0
 
         self.aruco_detector.update(color_image, color_camera_info)
         markers = self.aruco_detector.get_detected_markers()

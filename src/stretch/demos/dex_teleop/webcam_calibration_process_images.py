@@ -1,28 +1,23 @@
-import cv2
-import time
 import glob
-import time
-import cv2.aruco as aruco
-import webcam_calibration_aruco_board as ab
-import numpy as np
-from datetime import datetime
-import yaml
-import webcam as wc
 import pprint as pp
+import time
+from datetime import datetime
+
+import cv2
+import cv2.aruco as aruco
+import numpy as np
+import webcam as wc
+import webcam_calibration_aruco_board as ab
+import yaml
 
 
 def main():
     """Process images and perform webcam calibration."""
-    aruco_dict = ab.aruco_dict
     aruco_board = ab.board
 
     camera_name = "Logitech Webcam C930e"
     image_width = 1920
     image_height = 1080
-    fps = 30
-
-    num_images_to_collect = 60
-    time_between_images_sec = 0.5
 
     image_directory = wc.get_calibration_directory(
         camera_name, image_width, image_height
@@ -43,11 +38,15 @@ def main():
 
     images_used_for_calibration = []
 
+    # Create default parameters
     detector_parameters = aruco.DetectorParameters()
     refine_parameters = aruco.RefineParameters()
-    aruco_detector = aruco.ArucoDetector(
-        aruco_dict, detector_parameters, refine_parameters
-    )
+
+    # NOTE: unused older version of aruco detector!
+    # aruco_dict = ab.aruco_dict
+    # aruco_detector = aruco.ArucoDetector(
+    #     aruco_dict, detector_parameters, refine_parameters
+    # )
 
     charuco_parameters = aruco.CharucoParameters()
     charuco_detector = aruco.CharucoDetector(

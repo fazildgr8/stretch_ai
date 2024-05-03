@@ -22,9 +22,10 @@
 # dual licensing, please contact Hello Robot Inc.
 ###########################################################################
 
-from numba import njit
 import math
+
 import numpy as np
+from numba import njit
 
 
 @njit
@@ -81,7 +82,7 @@ def idealized_ik_with_rotary_base(wrist_position, b1):
     # lift (lambda)
     L = z
     # arm (alpha)
-    A = math.sqrt(x ** 2 + y ** 2 - b1 ** 2)
+    A = math.sqrt(x**2 + y**2 - b1**2)
     # base rotation (theta)
     T = -2 * math.atan((A + y) / (b1 - x))
 

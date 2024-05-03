@@ -1,13 +1,14 @@
-import numpy as np
-import cv2
-import yaml
-import subprocess
-from yaml.loader import SafeLoader
+import argparse
 import glob
+import subprocess
 import sys
 import time
+
+import cv2
+import numpy as np
+import yaml
 from usb.core import find as finddev
-import argparse
+from yaml.loader import SafeLoader
 
 
 def get_calibration_directory(camera_name, image_width, image_height):
@@ -27,9 +28,9 @@ def get_video_devices():
 
     command = "v4l2-ctl --list-devices"
     lines = subprocess.getoutput(command).split("\n")
-    lines = [l.strip() for l in lines if l != ""]
-    cameras = [l for l in lines if not ("/dev/" in l)]
-    devices = [l for l in lines if "/dev/" in l]
+    lines = [line.strip() for line in lines if line != ""]
+    cameras = [line for line in lines if not ("/dev/" in line)]
+    devices = [line for line in lines if "/dev/" in line]
 
     all_camera_devices = {}
     camera_devices = []
@@ -197,13 +198,10 @@ class Webcam:
             subprocess.check_call(webcam_command_line_configuration, shell=True)
 
     def get_next_frame(self):
+        """Gets the nect color frame from the webcam - this is the teleop webcam, so there's no depth or anything."""
 
         # Wait for a coherent pair of frames: depth and color
         ret, color_image = self.webcam.read()
-
-        depth_image = None
-        depth_camera_info = self.color_camera_info
-        depth_scale = 1.0
 
         if self.show_images:
             cv2.imshow("Webcam Image", color_image)

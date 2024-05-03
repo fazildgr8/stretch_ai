@@ -1,6 +1,6 @@
+import errno
 import math
 import os
-import errno
 import pprint as pp
 import time
 import timeit
@@ -15,17 +15,14 @@ from hello_helpers import hello_misc as hm
 from scipy.spatial.transform import Rotation
 from stretch_body.robot_params import RobotParams
 
-import stretch.motion.simple_ik as si
-import stretch.app.dex_teleop.robot_move as rm
 import stretch.app.dex_teleop.dex_teleop_parameters as dt
+import stretch.app.dex_teleop.robot_move as rm
+import stretch.motion.simple_ik as si
 import stretch.utils.loop_stats as lt
-from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 
 # This tells us if we are using the gripper center for control or not
 from stretch.app.dex_teleop.leader import use_gripper_center
-from stretch.utils.geometry import get_rotation_from_xyz
-
-from stretch.app.dex_teleop.leader import use_gripper_center
+from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver
 from stretch.utils.geometry import get_rotation_from_xyz
 
 
