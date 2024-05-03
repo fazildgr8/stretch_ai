@@ -53,12 +53,9 @@ class RobotClient:
         """Run the client. Optionally pass in an eval function."""
 
         loop_timer = lt.LoopStats(self.name)
+        first_frame = True
 
         try:
-            start_time = time.time()
-            iterations = 0
-            first_frame = True
-
             while True:
 
                 loop_timer.mark_start()
@@ -67,7 +64,6 @@ class RobotClient:
                 color_image = d405_output["color_image"]
                 depth_image = d405_output["depth_image"]
                 depth_camera_info = d405_output["depth_camera_info"]
-                color_camera_info = d405_output["color_camera_info"]
                 depth_scale = d405_output["depth_scale"]
 
                 if first_frame and evaluator is not None:
@@ -75,8 +71,9 @@ class RobotClient:
                     first_frame = False
 
                 # After extracting image, pass it to whatever is going to use it.
+                # Results are currently ignored.
                 # TODO: we might want to change this code path to something a bit better.
-                results = evaluator.apply(color_image, depth_image)
+                _ = evaluator.apply(color_image, depth_image)
 
                 loop_timer.mark_end()
                 if self.verbose:
@@ -90,8 +87,6 @@ class RobotClient:
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--robot_ip", type=str, default="192.168.1.15")
     parser.add_argument("--d405_port", type=int, default=4405)
