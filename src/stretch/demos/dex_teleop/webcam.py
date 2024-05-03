@@ -1,16 +1,13 @@
 import numpy as np
 import cv2
 import yaml
-from yaml.loader import SafeLoader
 import subprocess
+from yaml.loader import SafeLoader
 import glob
 import sys
 import time
 from usb.core import find as finddev
 import argparse
-
-print("cv2.__version__ =", cv2.__version__)
-print("sys.version =", sys.version)
 
 
 def get_calibration_directory(camera_name, image_width, image_height):
