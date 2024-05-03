@@ -120,7 +120,8 @@ class GoalFromMarkers:
         self.min_finger_width = dt.tongs_closed_grip_width
         self.max_finger_width = dt.tongs_open_grip_width
 
-    def get_goal_dict(self, markers):
+    def get_goal_dict(self, markers: dict) -> dict:
+        """Takes in detected markers as a dict. Returns a dict with the goal pose for the wrist and the gripper width."""
 
         if markers:
             grip_pose_marker = markers.get(self.grip_pose_marker_name, None)

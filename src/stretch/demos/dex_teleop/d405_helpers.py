@@ -85,12 +85,12 @@ def start_d405(exposure):
     # 848 x 480, 10 fps
     # 640 x 480, 30 fps
 
-    # width, height, fps = 1280, 720, 5
-    # width, height, fps = 848, 480, 10
-    # width, height, fps = 640, 480, 30
-    width, height, fps = 640, 480, 15
-    config.enable_stream(rs.stream.depth, width, height, rs.format.z16, fps)
-    config.enable_stream(rs.stream.color, width, height, rs.format.bgr8, fps)
+    # WIDTH, HEIGHT, FPS = 1280, 720, 5
+    # WIDTH, HEIGHT, FPS = 848, 480, 10
+    # WIDTH, HEIGHT, FPS = 640, 480, 30
+    WIDTH, HEIGHT, FPS = 640, 480, 15
+    config.enable_stream(rs.stream.depth, WIDTH, HEIGHT, rs.format.z16, FPS)
+    config.enable_stream(rs.stream.color, WIDTH, HEIGHT, rs.format.bgr8, FPS)
 
     profile = pipeline.start(config)
 
