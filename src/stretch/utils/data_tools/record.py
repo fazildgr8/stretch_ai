@@ -6,12 +6,11 @@ import subprocess
 import time
 from pathlib import Path
 
+import cv2
 import liblzfse
+import numpy as np
 
 logger = logging.getLogger(__name__)
-
-import cv2
-import numpy as np
 
 COMPLETION_FILENAME = "rgb_rel_videos_exported.txt"
 IMG_COMPLETION_FILENAME = "completed.txt"

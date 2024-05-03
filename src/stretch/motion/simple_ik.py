@@ -268,7 +268,8 @@ class SimpleIK:
         ]
 
         for wrist_position_goal in wrist_positions:
-            cfg = self.ik_rotary_base(wrist_position_goal)
+            # Config is output here but not used.
+            _ = self.ik_rotary_base(wrist_position_goal)
 
     def fk_prismatic_base(self, robot_configuration, use_urdf=False):
         cfg = robot_configuration
