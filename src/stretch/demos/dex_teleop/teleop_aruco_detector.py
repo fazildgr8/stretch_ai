@@ -150,7 +150,7 @@ class ArucoMarkerCollection:
     def draw_markers(self, image):
         return aruco.drawDetectedMarkers(image, self.aruco_corners, self.aruco_ids)
 
-    def update(self, rgb_image, rgb_camera_info):
+    def update(self, rgb_image, rgb_camera_info, verbose: bool = False):
         self.frame_number += 1
         self.rgb_image = rgb_image
         self.rgb_camera_info = rgb_camera_info
@@ -180,6 +180,9 @@ class ArucoMarkerCollection:
                     corners[0], self.frame_number, self.rgb_camera_info
                 )
 
+        if verbose:
+            print("Detected", num_detected, "markers")
+
 
 class ArucoDetector:
     def __init__(self, marker_info=None, show_debug_images=False):
@@ -206,10 +209,12 @@ class ArucoDetector:
         # save rotation for last
         if self.show_debug_images:
             aruco_image = self.aruco_marker_collection.draw_markers(self.rgb_image)
-            # display_aruco_image = cv2.rotate(aruco_image, cv2.ROTATE_90_COUNTERCLOCKWISE)
-            # cv2.imshow('Detected ArUco Markers', display_aruco_image)
-            # cv2.imshow('Detected ArUco Markers', aruco_image)
-            # cv2.waitKey(2)
+            display_aruco_image = cv2.rotate(
+                aruco_image, cv2.ROTATE_90_COUNTERCLOCKWISE
+            )
+            cv2.imshow("Detected ArUco Markers", display_aruco_image)
+            cv2.imshow("Detected ArUco Markers", aruco_image)
+            cv2.waitKey(2)
 
     def get_detected_marker_dict(self):
         out = {}
@@ -257,7 +262,8 @@ def get_special_frames(marker_dict):
         marker_z_axis = marker_dict["z_axis"]
         for k in frames:
             t = frames[k]["trans"]
-            rpy = frames[k]["rpy"]
+            # TODO: do we want to save rpy?
+            # rpy = frames[k]["rpy"]
             frame_pos = (
                 marker_pos
                 + (t[0] * marker_x_axis)
@@ -278,6 +284,7 @@ def get_special_frames(marker_dict):
 
 def main(args=None):
     detector = ArucoDetector()
+    print("detector =", detector)
     cv2.destroyAllWindows()
 
 
