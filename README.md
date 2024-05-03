@@ -81,13 +81,13 @@ You should see:
 
 On the robot:
 ```bash
-python -m stretch.app.dex_teleop.send_d405_images -r
-python -m stretch.app.dex_teleop.follower
+python -m stretch.demos.dex_teleop.send_d405_images -r
+python -m stretch.demos.dex_teleop.follower
 ```
 
 On a remote, GPU-enabled laptop or workstation connected to the [dex telop setup](https://github.com/hello-robot/stretch_dex_teleop):
 ```bash
-python -m stretch.app.dex_teleop.leader
+python -m stretch.demos.dex_teleop.leader
 ```
 
 [Read the Dex Teleop documentation](docs/dex_teleop.md) for more details.
