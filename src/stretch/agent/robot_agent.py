@@ -698,7 +698,7 @@ class RobotAgent:
     def print_found_classes(self, goal: Optional[str] = None):
         """Helper. print out what we have found according to detic."""
         if self.semantic_sensor is None:
-            logger.warn("Tried to print classes without semantic sensor!")
+            logger.warning("Tried to print classes without semantic sensor!")
             return
 
         instances = self.voxel_map.get_instances()
