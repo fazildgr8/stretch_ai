@@ -361,7 +361,7 @@ class HomeRobotZmqClient(RobotClient):
             time.sleep(5.0)
 
     def blocking_spin(self, verbose: bool = False, visualize: bool = False):
-        """this is just for testing"""
+        """Listen for incoming observations and update internal state"""
         sum_time = 0
         steps = 0
         t0 = timeit.default_timer()
