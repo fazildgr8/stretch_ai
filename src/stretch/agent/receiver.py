@@ -14,8 +14,8 @@ from loguru import logger
 
 from stretch.core.interfaces import ContinuousNavigationAction, Observations
 from stretch.core.robot import RobotClient
+from stretch.motion.kinematics import HelloStretchKinematics
 from stretch.motion.robot import RobotModel
-from stretch.motion.stretch import HelloStretchKinematics
 from stretch.utils.geometry import angle_difference
 from stretch.utils.image import Camera
 from stretch.utils.point_cloud import show_point_cloud

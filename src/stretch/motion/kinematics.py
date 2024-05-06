@@ -10,10 +10,10 @@ import numpy as np
 import pybullet as pb
 
 import stretch.utils.bullet as hrb
-from stretch.core.interfaces import ContinuousFullBodyAction
-from stretch.motion.bullet import BulletRobotModel, PybulletIKSolver
+from stretch.core.inerfaces import ContinuousFullBodyAction
 from stretch.motion.pinocchio_ik_solver import PinocchioIKSolver, PositionIKOptimizer
 from stretch.motion.robot import Footprint
+from stretch.motion.utils.bullet import BulletRobotModel, PybulletIKSolver
 from stretch.utils.pose import to_matrix
 
 # Stretch stuff

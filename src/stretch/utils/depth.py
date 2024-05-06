@@ -8,12 +8,11 @@ from argparse import Namespace
 
 import numpy as np
 import torch
-from home_robot.utils.constants import (
-    MAX_DEPTH_REPLACEMENT_VALUE,
-    MIN_DEPTH_REPLACEMENT_VALUE,
-)
 
-from . import rotation as ru
+import stretch.utils.geometry.rotation as ru
+
+MIN_DEPTH_REPLACEMENT_VALUE = 10000
+MAX_DEPTH_REPLACEMENT_VALUE = 10001
 
 
 def valid_depth_mask(depth: np.ndarray) -> np.ndarray:
