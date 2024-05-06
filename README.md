@@ -95,6 +95,20 @@ python -m stretch.demos.dex_teleop.leader
 
 [Read the Dex Teleop documentation](docs/dex_teleop.md) for more details.
 
+### OVMM Exploration
+
+```bash
+python -m stretch.demos.ovmm.run
+```
+
+You can show visualizations with:
+```bash
+python -m stretch.demos.ovmm.run --show-intermediate-maps --show-final-map
+```
+The flag `--show-intermediate-maps` shows the 3d map after each large motion (waypoint reached), and `--show-final-map` shows the final map after exploration is done.
+
+It will record a PCD/PKL file which can be interpreted with the `read_sparse_voxel_map` script; see below.
+
 ### Voxel Map Visualization
 
 You can test the voxel code on a captured pickle file:
