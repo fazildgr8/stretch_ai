@@ -23,7 +23,6 @@ from stretch.agent import get_parameters
 from stretch.agent.receiver import HomeRobotZmqClient
 from stretch.agent.robot_agent import RobotAgent
 from stretch.core.robot import RobotClient
-from stretch.perception import create_semantic_sensor
 
 # Import planning tools for exploration
 from stretch.perception.encoders import ClipEncoder
@@ -31,6 +30,9 @@ from stretch.perception.encoders import ClipEncoder
 # Chat and UI tools
 from stretch.utils.point_cloud import numpy_to_pcd, show_point_cloud
 from stretch.utils.visualization import get_x_and_y_from_path
+
+# TODO: semantic sensor code from HomeRobot
+# from stretch.perception import create_semantic_sensor
 
 
 @click.command()
