@@ -99,12 +99,12 @@ python -m stretch.demos.dex_teleop.leader
 
 You can test the voxel code on a captured pickle file:
 ```bash
-python -m stretch.agent.read_sparse_voxel_map -i ~/Downloads/stretch\ output\ 2024-03-21/stretch_output_2024-03-21_13-44-19.pkl
+python -m stretch.demos.ovmm.read_sparse_voxel_map -i ~/Downloads/stretch\ output\ 2024-03-21/stretch_output_2024-03-21_13-44-19.pkl
 ```
 
 Optional open3d visualization of the scene:
 ```bash
-python -m stretch.agent.read_sparse_voxel_map -i ~/Downloads/stretch\ output\ 2024-03-21/stretch_output_2024-03-21_13-44-19.pkl  --show-svm
+python -m stretch.demos.ovmm.read_sparse_voxel_map -i ~/Downloads/stretch\ output\ 2024-03-21/stretch_output_2024-03-21_13-44-19.pkl  --show-svm
 ```
 
 ### 
