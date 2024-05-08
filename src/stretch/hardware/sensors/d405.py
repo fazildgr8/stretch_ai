@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import cv2
 import numpy as np
 import pyrealsense2 as rs
@@ -9,6 +11,57 @@ from stretch_ai.servo.d405_helpers_without_pyrealsense import (
 
 exposure_keywords = ["low", "medium", "auto"]
 exposure_range = [0, 500000]
+
+
+class D405:
+    def __init__(self, exposure):
+        self.pipeline, self.profile = start_d405(exposure)
+
+        print("Connecting to D405 and getting camera info...")
+        self.depth_camera_info, self.color_camera_info = self.get_camera_infos()
+
+    def get_depth_scale(self):
+        return get_depth_scale(self.profile)
+
+    def get_frames(self):
+        frames = self.wait_for_frames()
+        depth_frame = frames.get_depth_frame()
+        color_frame = frames.get_color_frame()
+        return depth_frame, color_frame
+
+    def read_camera_infos(self):
+        color_frame, depth_frame = self.get_frames()
+        return get_camera_info(depth_frame), get_camera_info(color_frame)
+
+    def get_camera_infos(self):
+        return self.depth_camera_info, self.color_camera_info
+
+    def wait_for_frames(self):
+        return self.pipeline.wait_for_frames()
+
+    def get_images(self) -> Tuple[np.ndarray, np.ndarray]:
+        depth_frame, color_frame = self.get_frames()
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+        return depth_image, color_image
+
+    def get_message(self) -> dict:
+        """Get a message that can be sent via ZMQ"""
+        depth_camera_info, color_camera_info = self.get_camera_infos()
+        depth_scale = self.get_depth_scale()
+        depth_image, color_image = self.get_images()
+        d405_output = {
+            "depth_camera_info": depth_camera_info,
+            "color_camera_info": color_camera_info,
+            "depth_scale": depth_scale,
+            "depth_image": depth_image,
+            "color_image": color_image,
+        }
+        return d405_output
+
+    def stop(self):
+        """Close everything down so we can end cleanly."""
+        self.pipeline.stop()
 
 
 def exposure_argument_is_valid(value):
