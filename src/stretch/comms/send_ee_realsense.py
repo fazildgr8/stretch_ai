@@ -20,7 +20,10 @@ def initialize(camarr_port, camb64_port, exposure: str = "low"):
     camb64_sock.bind(f"tcp://*:{camb64_port}")
 
     # opencv camera
+    print(f"Creating D405 connection with exposure={exposure}")
     camera = D405(exposure)
+    print(f" - camera port = {camarr_port}")
+    print(f" - compressed port = {camb64_port}")
 
     return camarr_sock, camb64_sock, camera
 

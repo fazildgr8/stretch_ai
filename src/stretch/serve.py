@@ -109,6 +109,7 @@ class StretchServer:
         port = self._add_body_process(serve_body, port)
         port = self._add_cam_process(serve_head_nav_cam, port)
         port = self._add_cam_process(serve_ee_realsense, port)
+        print("done addind procs")
 
     def spin(self):
         """Spin for a while, letting all the threads keep serving."""
