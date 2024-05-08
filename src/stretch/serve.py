@@ -42,6 +42,16 @@ def serve_head_nav_cam(camarr_port, camb64_port):
         shnc.send_imagery_as_base64_str(camb64_sock, camera)
 
 
+def serve_ee_realsense(camarr_port, camb64_port):
+    import stretch.comms.send_ee_realsense as seer
+
+    camarr_sock, camb64_sock, camera = seer.initialize(camarr_port, camb64_port)
+    while True:
+        msg = seer.send_imagery_as_numpy_arr(camarr_sock, camera)
+        # Shrink the message
+        seer.send_imagery_as_base64_str(camb64_sock, msg)
+
+
 def serve_all(port_offset=None):
     port_offset = 20200 if port_offset is None else port_offset
     d = stretch_body.device.Device(name="stretchpy", req_params=False)

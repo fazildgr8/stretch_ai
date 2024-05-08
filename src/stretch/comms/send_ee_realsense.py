@@ -24,12 +24,14 @@ def initialize(camarr_port, camb64_port, exposure: str = "low"):
     return camarr_sock, camb64_sock, camera
 
 
-def send_imagery_as_numpy_arr(sock, camera):
-    sock.send_pyobj(camera.get_message())
+def send_imagery_as_numpy_arr(sock, camera: D405):
+    msg = camera.get_message()
+    sock.send_pyobj()
+    return msg
 
 
-def send_imagery_as_base64_str(sock, camera):
-    msg = copy.copy(camera.get_message())
+def send_imagery_as_base64_str(sock, message: dict):
+    msg = copy.copy(message)
     did_encode_rgb, buffer_rgb = cv2.imencode(".jpg", msg["color_image"])
     did_encode_dpt, buffer_dpt = cv2.imencode(".jp2", msg["depth_image"])
     msg["color_image"] = buffer_rgb
