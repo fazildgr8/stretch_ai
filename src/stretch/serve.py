@@ -1,5 +1,7 @@
 import argparse
 import multiprocessing
+import time
+from typing import Optional
 
 import stretch_body.device
 
@@ -52,57 +54,73 @@ def serve_ee_realsense(camarr_port, camb64_port):
         seer.send_imagery_as_base64_str(camb64_sock, msg)
 
 
-def serve_all(port_offset=None):
-    port_offset = 20200 if port_offset is None else port_offset
-    d = stretch_body.device.Device(name="stretchpy", req_params=False)
-    base_port = d.params.get("base_port", port_offset)
+class StretchServer:
+    def _add_body_process(self, function, port: int) -> int:
+        """Add a basic comms process, and let us know which port we are on next."""
+        port += 1
+        status_port = port
+        port += 1
+        moveby_port = port
+        port += 1
+        basevel_port = port
+        process = multiprocessing.Process(
+            target=function,
+            args=(
+                status_port,
+                moveby_port,
+                basevel_port,
+            ),
+        )
+        self._processes.append(process)
+        return port
 
-    # Spawn each component as a separate process
-    port = base_port
-    serve_protocol_process = multiprocessing.Process(
-        target=serve_protocol, args=(port,)
-    )
+    def _add_cam_process(self, function, port: int) -> int:
+        """Add a basic comms process, and let us know which port we are on next."""
+        port += 1
+        camarr_port = port
+        port += 1
+        camb64_port = port
+        process = multiprocessing.Process(
+            target=function,
+            args=(
+                camarr_port,
+                camb64_port,
+            ),
+        )
+        self._processes.append(process)
+        return port
 
-    port += 1
-    status_port = port
-    port += 1
-    moveby_port = port
-    port += 1
-    basevel_port = port
-    serve_body_process = multiprocessing.Process(
-        target=serve_body,
-        args=(
-            status_port,
-            moveby_port,
-            basevel_port,
-        ),
-    )
+    def __init__(self, port_offset: Optional[int] = None):
+        """Create the processes that need to be created"""
+        port_offset = 20200 if port_offset is None else port_offset
+        self._processes = []
 
-    port += 1
-    camarr_port = port
-    port += 1
-    camb64_port = port
-    serve_head_nav_cam_process = multiprocessing.Process(
-        target=serve_head_nav_cam,
-        args=(
-            camarr_port,
-            camb64_port,
-        ),
-    )
+        self.device = stretch_body.device.Device(name="stretchpy", req_params=False)
+        base_port = self.device.params.get("base_port", port_offset)
 
-    try:
-        serve_protocol_process.start()
-        serve_body_process.start()
-        serve_head_nav_cam_process.start()
-        while True:
-            pass
-    finally:
-        serve_protocol_process.terminate()
-        serve_protocol_process.join()
-        serve_body_process.terminate()
-        serve_body_process.join()
-        serve_head_nav_cam_process.terminate()
-        serve_head_nav_cam_process.join()
+        # Spawn each component as a separate process
+        port = base_port
+        serve_protocol_process = multiprocessing.Process(
+            target=serve_protocol, args=(port,)
+        )
+        self._processes.append(serve_protocol_process)
+
+        # Spawn each component as a separate process
+        port = self._add_body_process(serve_body, port)
+        port = self._add_cam_process(serve_head_nav_cam, port)
+        port = self._add_cam_process(serve_ee_realsense, port)
+
+    def spin(self):
+        """Spin for a while, letting all the threads keep serving."""
+        try:
+            for process in self._processes:
+                process.start()
+            while True:
+                time.sleep(1e-5)
+        finally:
+            for process in self._processes:
+                process.terminate()
+                process.join()
 
 
 if __name__ == "__main__":
@@ -113,4 +131,5 @@ if __name__ == "__main__":
     args, _ = parser.parse_known_args()
 
     print(f"StretchPy Server v{stretch.versions.__version__}")
-    serve_all(args.port)
+    server = StretchServer(args.port)
+    server.spin()

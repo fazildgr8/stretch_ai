@@ -3,7 +3,8 @@ import io
 
 import cv2
 import zmq
-from hardware.sensors.d405 import D405
+
+from stretch.hardware.sensors.d405 import D405
 
 
 def initialize(camarr_port, camb64_port, exposure: str = "low"):
@@ -26,7 +27,7 @@ def initialize(camarr_port, camb64_port, exposure: str = "low"):
 
 def send_imagery_as_numpy_arr(sock, camera: D405):
     msg = camera.get_message()
-    sock.send_pyobj()
+    sock.send_pyobj(msg)
     return msg
 
 
