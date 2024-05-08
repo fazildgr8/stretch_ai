@@ -18,7 +18,7 @@ class D405:
         self.pipeline, self.profile = start_d405(exposure)
 
         print("Connecting to D405 and getting camera info...")
-        self.depth_camera_info, self.color_camera_info = self.get_camera_infos()
+        self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
 
     def get_depth_scale(self):
         return get_depth_scale(self.profile)

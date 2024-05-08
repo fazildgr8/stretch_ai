@@ -35,6 +35,7 @@ def autoAdjustments_with_convertScaleAbs(img):
 
 
 def main(use_remote_computer, d405_port, exposure, scaling, gamma):
+    d405 = None
     try:
         print("cv2.__version__ =", cv2.__version__)
         print("cv2.__path__ =", cv2.__path__)
@@ -57,19 +58,19 @@ def main(use_remote_computer, d405_port, exposure, scaling, gamma):
 
         socket.bind(address)
 
-        loop_timer = lt.LoopTimer()
+        loop_timer = lt.LoopStats("d405_sender")
 
         # Run in a loop, get images and publish them.
         while True:
             loop_timer.mark_start()
 
             if first_frame:
-                depth_scale = D405.get_depth_scale()
+                depth_scale = d405.get_depth_scale()
                 print("depth_scale = ", depth_scale)
                 print()
 
                 # Get camera info
-                depth_camera_info, color_camera_info = D405.get_camera_infos()
+                depth_camera_info, color_camera_info = d405.get_camera_infos()
 
                 print_camera_info = True
                 if print_camera_info:
@@ -136,7 +137,8 @@ def main(use_remote_computer, d405_port, exposure, scaling, gamma):
             loop_timer.pretty_print()
 
     finally:
-        d405.stop()
+        if d405 is not None:
+            d405.stop()
 
 
 if __name__ == "__main__":
