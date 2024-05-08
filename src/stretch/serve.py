@@ -45,7 +45,7 @@ def serve_head_nav_cam(camarr_port, camb64_port):
 
 
 def serve_ee_realsense(camarr_port, camb64_port):
-    import stretch.comms.send_ee_realsense as seer
+    import stretch.comms.send_realsense as seer
 
     camarr_sock, camb64_sock, camera = seer.initialize(camarr_port, camb64_port)
     while True:
