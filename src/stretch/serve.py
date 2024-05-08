@@ -112,6 +112,7 @@ class StretchServer:
 
     def spin(self):
         """Spin for a while, letting all the threads keep serving."""
+        print("Server is running!")
         try:
             for process in self._processes:
                 process.start()
