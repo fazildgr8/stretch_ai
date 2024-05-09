@@ -6,6 +6,10 @@ class D435:
 
     def __init__(self, exposure=1000):
         self.exposure = exposure
+        self.pipeline = rs.pipeline()
+        self.config = rs.config()
+        self._get_camera()
+        #self.config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 90)
 
     def _get_camera(self):
         camera_info = [
