@@ -20,11 +20,13 @@ def initialize(ip_addr, camarr_port, camb64_port):
     return camarr_sock, camb64_sock
 
 
-def recv_imagery_as_numpy_arr(sock):
+def recv_msg(sock):
     return sock.recv_pyobj()
 
 
-def recv_imagery_as_base64_str(sock):
-    b64_str = sock.recv()
-    b64_arr = np.asarray(bytearray(b64_str), dtype=np.uint8)
-    return cv2.imdecode(b64_arr, cv2.IMREAD_COLOR)
+def recv_compressed_msg(sock):
+    msg = sock.recv()
+    msg["rgb"] = cv2.imdecode(msg["rgb"], cv2.IMREAD_COLOR)
+    compressed_depth = msg["depth_image"]
+    msg["depth_image"] = cv2.imdecode(compressed_depth, cv2.IMREAD_UNCHANGED)
+    return msg

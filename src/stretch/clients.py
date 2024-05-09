@@ -1,6 +1,6 @@
 import numbers
 
-from .comms import recv_body, recv_head_nav_cam, recv_protocol
+from .comms import recv_body, recv_head_nav_cam, recv_protocol, recv_realsense
 from .exceptions.connection import NotConnectedException
 from .exceptions.motion import (
     BaseVelocityNotAcceptedException,
@@ -48,6 +48,20 @@ class StretchClient:
         hncb64_port = self.port + 5
         _, self.hncb64_sock = recv_head_nav_cam.initialize(
             self.ip_addr, hncarr_port, hncb64_port
+        )
+
+        # EE realsense
+        ee_arr_port = self.port + 6
+        ee_b64_port = self.port + 7
+        self.ee_arr_sock, self.ee_b64_sock = recv_realsense.initialize(
+            self.ip_addr, ee_arr_port, ee_b64_port
+        )
+
+        # Head realsense
+        head_arr_port = self.port + 6
+        head_b64_port = self.port + 7
+        self.head_arr_sock, self.head_b64_sock = recv_realsense.initialize(
+            self.ip_addr, head_arr_port, head_b64_port
         )
 
         self.connected = True
@@ -133,6 +147,16 @@ class StretchClient:
         if not self.connected:
             raise NotConnectedException("use the connect() method")
         return recv_head_nav_cam.recv_imagery_as_base64_str(self.hncb64_sock)
+
+    def get_ee_frame(self):
+        if not self.connected:
+            raise NotConnectedException("use the connect() method")
+        return recv_realsense.recv_compressed_msg(self.ee_b64_sock)
+
+    def get_head_frame(self):
+        if not self.connected:
+            raise NotConnectedException("use the connect() method")
+        return recv_realsense.recv_compressed_msg(self.head_b64_sock)
 
     def stream_nav_camera(self):
         """Returns Python generator to stream numpy BGR imagery
