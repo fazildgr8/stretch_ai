@@ -58,8 +58,8 @@ class StretchClient:
         )
 
         # Head realsense
-        head_arr_port = self.port + 6
-        head_b64_port = self.port + 7
+        head_arr_port = self.port + 8
+        head_b64_port = self.port + 9
         self.head_arr_sock, self.head_b64_sock = recv_realsense.initialize(
             self.ip_addr, head_arr_port, head_b64_port
         )
