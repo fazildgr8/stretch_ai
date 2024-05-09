@@ -6,13 +6,14 @@ import pyrealsense2 as rs
 from stretch.drivers.realsense_base import Realsense
 
 WIDTH, HEIGHT, FPS = 640, 480, 30
+# WIDTH, HEIGHT, FPS = 640, 480, 15
 
 
 class D435i(Realsense):
     """Wrapper for accessing data from a D435 realsense camera, used as the head camera on Stretch RE1, RE2, and RE3."""
 
     def __init__(self, exposure: str = "auto", camera_number: int = 0):
-        super().__init__(exposure)
+        # super().__init__(exposure)
         print("Connecting to D435i and getting camera info...")
         self._setup_camera(exposure=exposure, number=camera_number)
         self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
@@ -44,6 +45,7 @@ class D435i(Realsense):
         Args:
             number(int): which camera to pick in order.
         """
+
         camera_info = [
             {
                 "name": device.get_info(rs.camera_info.name),
@@ -51,13 +53,19 @@ class D435i(Realsense):
             }
             for device in rs.context().devices
         ]
+        print("Searching for D435i...")
         d435i_infos = []
-        for info in camera_info:
+        for i, info in enumerate(camera_info):
+            print(i, info["name"], info["serial_number"])
             if "D435I" in info["name"]:
                 d435i_infos.append(info)
 
         if len(d435i_infos) == 0:
             raise RuntimeError("could not find any supported d435i cameras")
+
+        self.exposure = exposure
+        self.pipeline = rs.pipeline()
+        self.config = rs.config()
 
         # Specifically enable the camera we want to use - make sure it's d435i
         self.config.enable_device(d435i_infos[number]["serial_number"])
@@ -66,8 +74,8 @@ class D435i(Realsense):
         self.profile = self.pipeline.start(self.config)
 
         # Create an align object to align depth frames to color frames
-        self.color_stream = rs.stream.color
-        self.depth_stream = rs.align(self.color_stream)
+        self.align_to = rs.stream.color
+        self.align = rs.align(self.align_to)
 
         if exposure == "auto":
             # Use autoexposre
@@ -92,3 +100,4 @@ class D435i(Realsense):
 
 if __name__ == "__main__":
     camera = D435i()
+    print(camera.get_message())
