@@ -120,14 +120,14 @@ class StretchServer:
 
         def serve_ee_realsense(port1, port2):
             return serve_realsense(
-                port1, port, exposure=ee_exposure, sensor_type="d405"
+                port1, port2, exposure=ee_exposure, sensor_type="d405"
             )
 
         port = self._add_cam_process(serve_ee_realsense, port)
 
         def serve_head_realsense(port1, port2):
             return serve_realsense(
-                port1, port, exposure=head_exposure, sensor_type="d435i"
+                port1, port2, exposure=head_exposure, sensor_type="d435i"
             )
 
         port = self._add_cam_process(serve_head_realsense, port)

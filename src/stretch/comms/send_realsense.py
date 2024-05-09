@@ -28,7 +28,7 @@ def initialize(
         camera = D405(exposure=exposure)
     elif sensor_type == "d435" or sensor_type == "d435i":
         print(f"Creating D435i connection with exposure={exposure}")
-        camera = D435i(exposure=exposure, number=0)
+        camera = D435i(exposure=exposure, camera_number=0)
     else:
         raise NotImplementedError(f"Camera type not supported: {sensor_type}")
 
