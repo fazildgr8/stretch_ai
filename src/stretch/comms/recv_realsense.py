@@ -29,5 +29,4 @@ def recv_compressed_msg(sock):
     msg["color_image"] = cv2.imdecode(msg["color_image"], cv2.IMREAD_COLOR)
     compressed_depth = msg["depth_image"]
     msg["depth_image"] = cv2.imdecode(compressed_depth, cv2.IMREAD_UNCHANGED)
-    breakpoint()
     return msg
