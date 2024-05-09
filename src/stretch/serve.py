@@ -44,11 +44,13 @@ def serve_head_nav_cam(camarr_port, camb64_port):
         shnc.send_imagery_as_base64_str(camb64_sock, camera)
 
 
-def serve_ee_realsense(camarr_port, camb64_port, exposure: str = "low"):
+def serve_realsense(
+    camarr_port, camb64_port, exposure: str = "low", sensor_type="d405"
+):
     import stretch.comms.send_realsense as seer
 
     camarr_sock, camb64_sock, camera = seer.initialize(
-        camarr_port, camb64_port, exposure=exposure, sensor_type="d405"
+        camarr_port, camb64_port, exposure=exposure, sensor_type=sensor_type
     )
     while True:
         msg = seer.send_imagery_as_numpy_arr(camarr_sock, camera)
@@ -92,7 +94,12 @@ class StretchServer:
         self._processes.append(process)
         return port
 
-    def __init__(self, port_offset: Optional[int] = None):
+    def __init__(
+        self,
+        port_offset: Optional[int] = None,
+        ee_exposure: str = "low",
+        head_exposure: str = "auto",
+    ):
         """Create the processes that need to be created"""
         port_offset = 20200 if port_offset is None else port_offset
         self._processes = []
@@ -110,8 +117,21 @@ class StretchServer:
         # Spawn each component as a separate process
         port = self._add_body_process(serve_body, port)
         port = self._add_cam_process(serve_head_nav_cam, port)
+
+        def serve_ee_realsense(port1, port2):
+            return serve_realsense(
+                port1, port, exposure=ee_exposure, sensor_type="d405"
+            )
+
         port = self._add_cam_process(serve_ee_realsense, port)
-        print("done addind procs")
+
+        def serve_head_realsense(port1, port2):
+            return serve_realsense(
+                port1, port, exposure=head_exposure, sensor_type="d435i"
+            )
+
+        port = self._add_cam_process(serve_head_realsense, port)
+        print("Server is done adding procs.")
 
     def spin(self):
         """Spin for a while, letting all the threads keep serving."""

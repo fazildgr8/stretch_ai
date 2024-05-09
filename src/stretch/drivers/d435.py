@@ -13,8 +13,11 @@ class D435i(Realsense):
 
     def __init__(self, exposure: str = "auto", camera_number: int = 0):
         super.__init__(exposure)
+        print("Connecting to D435i and getting camera info...")
         self._setup_camera(exposure=exposure, number=camera_number)
         self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
+        print(f"  depth camera: {self.depth_camera_info}")
+        print(f"  color camera: {self.color_camera_info}")
 
     def get_camera_infos(self):
         return self.depth_camera_info, self.color_camera_info

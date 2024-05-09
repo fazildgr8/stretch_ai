@@ -5,6 +5,7 @@ import cv2
 import zmq
 
 from stretch.drivers.d405 import D405
+from stretch.drivers.d435 import D435i
 
 
 def initialize(
@@ -24,12 +25,15 @@ def initialize(
     if sensor_type == "d405":
         # opencv camera
         print(f"Creating D405 connection with exposure={exposure}")
-        camera = D405(exposure)
-        print(f" - camera port = {camarr_port}")
-        print(f" - compressed port = {camb64_port}")
+        camera = D405(exposure=exposure)
+    elif sensor_type == "d435" or sensor_type == "d435i":
+        print(f"Creating D435i connection with exposure={exposure}")
+        camera = D435i(exposure=exposure, number=0)
     else:
         raise NotImplementedError(f"Camera type not supported: {sensor_type}")
 
+    print(f" - camera port = {camarr_port}")
+    print(f" - compressed port = {camb64_port}")
     return camarr_sock, camb64_sock, camera
 
 

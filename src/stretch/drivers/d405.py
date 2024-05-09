@@ -21,6 +21,8 @@ class D405(Realsense):
 
         print("Connecting to D405 and getting camera info...")
         self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
+        print(f"  depth camera: {self.depth_camera_info}")
+        print(f"  color camera: {self.color_camera_info}")
 
     def get_camera_infos(self):
         return self.depth_camera_info, self.color_camera_info
