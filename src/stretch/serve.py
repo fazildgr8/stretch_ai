@@ -44,10 +44,12 @@ def serve_head_nav_cam(camarr_port, camb64_port):
         shnc.send_imagery_as_base64_str(camb64_sock, camera)
 
 
-def serve_ee_realsense(camarr_port, camb64_port):
+def serve_ee_realsense(camarr_port, camb64_port, exposure: str = "low"):
     import stretch.comms.send_realsense as seer
 
-    camarr_sock, camb64_sock, camera = seer.initialize(camarr_port, camb64_port)
+    camarr_sock, camb64_sock, camera = seer.initialize(
+        camarr_port, camb64_port, exposure=exposure, sensor_type="d405"
+    )
     while True:
         msg = seer.send_imagery_as_numpy_arr(camarr_sock, camera)
         # Shrink the message

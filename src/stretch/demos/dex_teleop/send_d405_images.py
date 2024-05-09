@@ -6,9 +6,9 @@ import numpy as np
 import zmq
 from stretch_ai.utils.image import adjust_gamma
 
-import stretch.hardware.sensors.d405 as dh
+import stretch.drivers.d405 as dh
 import stretch.utils.loop_stats as lt
-from stretch.hardware.sensors.d405 import D405
+from stretch.drivers.d405 import D405
 
 
 ###########################

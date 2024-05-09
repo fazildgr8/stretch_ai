@@ -4,10 +4,12 @@ import io
 import cv2
 import zmq
 
-from stretch.hardware.sensors.d405 import D405
+from stretch.drivers.d405 import D405
 
 
-def initialize(camarr_port, camb64_port, exposure: str = "low"):
+def initialize(
+    camarr_port, camb64_port, exposure: str = "low", sensor_type: str = "d405"
+):
     # zeromq
     ctx = zmq.Context()
     camarr_sock = ctx.socket(zmq.PUB)
@@ -19,11 +21,14 @@ def initialize(camarr_port, camb64_port, exposure: str = "low"):
     camb64_sock.setsockopt(zmq.RCVHWM, 1)
     camb64_sock.bind(f"tcp://*:{camb64_port}")
 
-    # opencv camera
-    print(f"Creating D405 connection with exposure={exposure}")
-    camera = D405(exposure)
-    print(f" - camera port = {camarr_port}")
-    print(f" - compressed port = {camb64_port}")
+    if sensor_type == "d405":
+        # opencv camera
+        print(f"Creating D405 connection with exposure={exposure}")
+        camera = D405(exposure)
+        print(f" - camera port = {camarr_port}")
+        print(f" - compressed port = {camb64_port}")
+    else:
+        raise NotImplementedError(f"Camera type not supported: {sensor_type}")
 
     return camarr_sock, camb64_sock, camera
 
