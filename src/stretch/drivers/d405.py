@@ -9,36 +9,21 @@ from stretch.drivers.d405_without_pyrealsense import (
     pixel_from_3d,
     pixel_to_3d,
 )
+from stretch.drivers.realsense_base import Realsense
 
 exposure_keywords = ["low", "medium", "auto"]
 exposure_range = [0, 500000]
 
 
-class D405:
+class D405(Realsense):
     def __init__(self, exposure):
         self.pipeline, self.profile = start_d405(exposure)
 
         print("Connecting to D405 and getting camera info...")
         self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
 
-    def get_depth_scale(self):
-        return get_depth_scale(self.profile)
-
-    def get_frames(self):
-        frames = self.wait_for_frames()
-        depth_frame = frames.get_depth_frame()
-        color_frame = frames.get_color_frame()
-        return depth_frame, color_frame
-
-    def read_camera_infos(self):
-        color_frame, depth_frame = self.get_frames()
-        return get_camera_info(depth_frame), get_camera_info(color_frame)
-
     def get_camera_infos(self):
         return self.depth_camera_info, self.color_camera_info
-
-    def wait_for_frames(self):
-        return self.pipeline.wait_for_frames()
 
     def get_images(self) -> Tuple[np.ndarray, np.ndarray]:
         depth_frame, color_frame = self.get_frames()
@@ -165,51 +150,3 @@ def start_d405(exposure):
         stereo_sensor.set_option(rs.option.exposure, exposure_value)
 
     return pipeline, profile
-
-
-def get_camera_info(frame):
-    intrinsics = rs.video_stream_profile(frame.profile).get_intrinsics()
-
-    # from Intel's documentation
-    # https://intelrealsense.github.io/librealsense/python_docs/_generated/pyrealsense2.intrinsics.html#pyrealsense2.intrinsics
-    # "
-    # coeffs	Distortion coefficients
-    # fx	Focal length of the image plane, as a multiple of pixel width
-    # fy	Focal length of the image plane, as a multiple of pixel height
-    # height	Height of the image in pixels
-    # model	Distortion model of the image
-    # ppx	Horizontal coordinate of the principal point of the image, as a pixel offset from the left edge
-    # ppy	Vertical coordinate of the principal point of the image, as a pixel offset from the top edge
-    # width	Width of the image in pixels
-    # "
-
-    # out = {
-    #     'dist_model' : intrinsics.model,
-    #     'dist_coeff' : intrinsics.coeffs,
-    #     'fx' : intrinsics.fx,
-    #     'fy' : intrinsics.fy,
-    #     'height' : intrinsics.height,
-    #     'width' : intrinsics.width,
-    #     'ppx' : intrinsics.ppx,
-    #     'ppy' : intrinsics.ppy
-    #     }
-
-    camera_matrix = np.array(
-        [
-            [intrinsics.fx, 0.0, intrinsics.ppx],
-            [0.0, intrinsics.fy, intrinsics.ppy],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-
-    distortion_model = intrinsics.model
-
-    distortion_coefficients = np.array(intrinsics.coeffs)
-
-    camera_info = {
-        "camera_matrix": camera_matrix,
-        "distortion_coefficients": distortion_coefficients,
-        "distortion_model": distortion_model,
-    }
-
-    return camera_info

@@ -1,16 +1,40 @@
+from typing import Tuple
+
+import numpy as np
 import pyrealsense2 as rs
+
+from stretch.drivers.realsense_base import Realsense
 
 WIDTH, HEIGHT, FPS = 640, 480, 30
 
 
-class D435i:
+class D435i(Realsense):
     """Wrapper for accessing data from a D435 realsense camera, used as the head camera on Stretch RE1, RE2, and RE3."""
 
     def __init__(self, exposure: str = "auto", camera_number: int = 0):
-        self.exposure = exposure
-        self.pipeline = rs.pipeline()
-        self.config = rs.config()
+        super.__init__(exposure)
         self._setup_camera(exposure=exposure, number=camera_number)
+        self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
+
+    def get_camera_infos(self):
+        return self.depth_camera_info, self.color_camera_info
+
+    def get_images(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Get a pair of numpy arrays for the images we want to use."""
+
+        # Get the frames from the realsense
+        frames = self.wait_for_frames()
+
+        # Align the depth frame to color frame
+        aligned_frames = self.align.process(frames)
+
+        # Get aligned frames
+        aligned_depth_frame = aligned_frames.get_depth_frame()
+        color_frame = aligned_frames.get_color_frame()
+
+        depth_image = np.asanyarray(aligned_depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+        return depth_image, color_image
 
     def _setup_camera(self, exposure: str = "auto", number: int = 0):
         """
@@ -61,12 +85,6 @@ class D435i:
                 self.pipeline.get_active_profile().get_device().query_sensors()[0]
             )
             self.stereo_sensor.set_option(rs.option.exposure, exposure_value)
-
-    def get_depth_scale(self) -> float:
-        """Get scaling between depth values and metric units (meters)"""
-        depth_sensor = self.profile.get_device().first_depth_sensor()
-        depth_scale = depth_sensor.get_depth_scale()
-        return depth_scale
 
 
 if __name__ == "__main__":
