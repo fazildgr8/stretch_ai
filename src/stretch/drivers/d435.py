@@ -13,7 +13,6 @@ class D435i(Realsense):
     """Wrapper for accessing data from a D435 realsense camera, used as the head camera on Stretch RE1, RE2, and RE3."""
 
     def __init__(self, exposure: str = "auto", camera_number: int = 0):
-        # super().__init__(exposure)
         print("Connecting to D435i and getting camera info...")
         self._setup_camera(exposure=exposure, number=camera_number)
         self.depth_camera_info, self.color_camera_info = self.read_camera_infos()
