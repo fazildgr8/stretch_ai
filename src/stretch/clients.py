@@ -142,26 +142,40 @@ class StretchClient:
                 )
         recv_body.send_basevel(self.basevel_sock, twist)
 
+    def require_connection(self, function):
+        def wrapper_function(*args, **kwargs):
+            if not self.connected:
+                raise NotConnectedException("use the connect() method")
+            return function(*args, **kwargs)
+
+    @require_connection
     def take_nav_picture(self):
         """Returns numpy BGR image from Head Nav camera"""
-        if not self.connected:
-            raise NotConnectedException("use the connect() method")
         return recv_head_nav_cam.recv_imagery_as_base64_str(self.hncb64_sock)
 
+    @require_connection
+    def take_head_picture(self):
+        """Get a single frame from the robot head camera."""
+        # TODO: replace with proto
+        return self.get_head_frame()["color_image"]
+
+    @require_connection
+    def take_ee_picture(self):
+        """Get a single frame from ee camera"""
+        # TODO: replace with proto
+        return self.get_ee_frame()["color_image"]
+
+    @require_connection
     def get_ee_frame(self):
-        if not self.connected:
-            raise NotConnectedException("use the connect() method")
         return recv_realsense.recv_compressed_msg(self.ee_b64_sock)
 
+    @require_connection
     def get_head_frame(self):
-        if not self.connected:
-            raise NotConnectedException("use the connect() method")
         return recv_realsense.recv_compressed_msg(self.head_b64_sock)
 
+    @require_connection
     def stream_nav_camera(self):
         """Returns Python generator to stream numpy BGR imagery
         from Head Nav camera"""
-        if not self.connected:
-            raise NotConnectedException("use the connect() method")
         while True:
             yield self.take_nav_picture()
