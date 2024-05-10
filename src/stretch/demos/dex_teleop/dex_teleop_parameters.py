@@ -44,6 +44,37 @@ def get_arg_parser():
         action="store_true",
         help="Holding the tongs high will gradually slide the lift range of motion upward. Holding them low will gradually slide the lift range of motion downward. The default is to use a fixed range of motion for the lift.",
     )
+    parser.add_argument(
+        "-p",
+        "--send-port",
+        type=int,
+        default=4405,
+        help="Set the port used for sending d405 images.",
+    )
+    parser.add_argument(
+        "-g",
+        "--gamma",
+        action="store",
+        type=float,
+        default=2.0,
+        help="Set the gamma correction factor for the images.",
+    )
+    parser.add_argument(
+        "-e",
+        "--exposure",
+        action="store",
+        type=str,
+        default="low",
+        help="Set the D405 exposure to {dh.exposure_keywords} or an integer in the range {dh.exposure_range}",
+    )
+    parser.add_argument(
+        "-s",
+        "--scaling",
+        action="store",
+        type=float,
+        default=0.5,
+        help="Set the scaling factor for the images.",
+    )
 
     return parser
 
