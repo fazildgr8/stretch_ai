@@ -9,6 +9,13 @@ from .exceptions.motion import (
 from .utils import auth
 
 
+def require_connection(function):
+    def wrapper_function(self, *args, **kwargs):
+        if not self.connected:
+            raise NotConnectedException("use the connect() method")
+        return function(self, *args, **kwargs)
+
+
 class StretchClient:
     """This class creates a client connection to a Stretch robot."""
 
@@ -141,12 +148,6 @@ class StretchClient:
                     f"Cannot move {component} at {speed} speed"
                 )
         recv_body.send_basevel(self.basevel_sock, twist)
-
-    def require_connection(self, function):
-        def wrapper_function(*args, **kwargs):
-            if not self.connected:
-                raise NotConnectedException("use the connect() method")
-            return function(*args, **kwargs)
 
     @require_connection
     def take_nav_picture(self):
