@@ -19,6 +19,7 @@ from overrides import override
 from stretch_mujoco import StretchMujocoSimulator
 
 try:
+    from stretch_mujoco.objectverse import generate_basic_grasp_scene_model
     from stretch_mujoco.robocasa_gen import model_generation_wizard
 except ImportError as e:
     from stretch.utils.logger import error
@@ -365,10 +366,21 @@ class MujocoZmqServer(BaseZmqServer):
         return self.control_mode
 
     @override
-    def start(self, show_viewer_ui: bool = False, robocasa: bool = False):
+    def start(
+        self, show_viewer_ui: bool = False, robocasa: bool = False, sim_gamepad: bool = False
+    ):
         self.robot_sim.start(
             show_viewer_ui
         )  # This will start the simulation and open Mujoco-Viewer window
+        if sim_gamepad:
+            try:
+                from stretch_mujoco.gamepad_teleop import GamePad
+
+                gamepad = GamePad()
+                gamepad.run_aync(self.robot_sim)
+                gamepad.activate()
+            except ImportError as e:
+                print("Could not import gamepad teleop")
         super().start()
 
         # Create a thread for the control loop
@@ -578,6 +590,8 @@ class MujocoZmqServer(BaseZmqServer):
 @click.option("--robocasa-style", type=int, default=1, help="Robocasa style to generate")
 @click.option("--robocasa-layout", type=int, default=1, help="Robocasa layout to generate")
 @click.option("--show-viewer-ui", default=False, help="Show the Mujoco viewer UI", is_flag=True)
+@click.option("--objectverse", default=False, help="Use objectverse scene", is_flag=True)
+@click.option("--sim-gamepad", default=False, help="Use gamepad in simulation", is_flag=True)
 @click.option(
     "--robocasa-write-to-xml",
     default=False,
@@ -600,6 +614,8 @@ def main(
     robocasa_style: int,
     robocasa_layout: int,
     robocasa_write_to_xml: bool,
+    objectverse: bool,
+    sim_gamepad: bool,
     show_viewer_ui: bool,
 ):
 
@@ -610,6 +626,12 @@ def main(
             style=robocasa_style,
             layout=robocasa_layout,
             write_to_file=robocasa_write_to_xml,
+        )
+    elif objectverse:
+        scene_model = generate_basic_grasp_scene_model(
+            object_group=[
+                "mug",
+            ]
         )
 
     server = MujocoZmqServer(
@@ -626,7 +648,7 @@ def main(
         scene_model=scene_model,
     )
     try:
-        server.start(show_viewer_ui=show_viewer_ui, robocasa=use_robocasa)
+        server.start(show_viewer_ui=show_viewer_ui, robocasa=use_robocasa, sim_gamepad=sim_gamepad)
 
     except KeyboardInterrupt:
         server.robot_sim.stop()
