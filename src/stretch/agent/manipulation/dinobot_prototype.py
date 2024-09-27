@@ -9,7 +9,7 @@
 
 import sys
 
-sys.path.append("/home/hello-robot/repos/dino-vit-features")
+sys.path.append("/home/fazil/repos/dino-vit-features")
 import math
 import os
 import pickle
@@ -519,7 +519,7 @@ def rerun_log(robot: RobotClient, T_d405_target: np.ndarray):
 
 if __name__ == "__main__":
     DEBUG = False
-    robot = RobotClient(robot_ip="10.0.0.2")
+    robot = RobotClient(robot_ip="127.0.0.1")
     dinobot = Dinobot()
     error_threshold = 0.17
     detic = DeticPerception()

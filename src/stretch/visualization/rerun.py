@@ -185,8 +185,8 @@ class RerunVsualizer:
         open_browser: bool = True,
         server_memory_limit: str = "4GB",
         collapse_panels: bool = True,
-        show_cameras_in_3d_view: bool = False,
-        show_camera_point_clouds: bool = True,
+        show_cameras_in_3d_view: bool = True,
+        show_camera_point_clouds: bool = False,
     ):
         """Rerun visualizer class
         Args:
@@ -266,7 +266,7 @@ class RerunVsualizer:
                 ),
             )
         else:
-            rr.log("world/head_camera/depth", rr.depthimage(obs.head_depth))
+            rr.log("world/head_camera/depth", rr.DepthImage(obs.depth))
 
         if self.show_cameras_in_3d_view:
             rot, trans = decompose_homogeneous_matrix(obs.camera_pose)
@@ -339,7 +339,7 @@ class RerunVsualizer:
                 ),
             )
         else:
-            rr.log("world/ee_camera/depth", rr.depthimage(servo.ee_depth))
+            rr.log("world/ee_camera/depth", rr.DepthImage(servo.ee_depth))
 
         if self.show_cameras_in_3d_view:
             rot, trans = decompose_homogeneous_matrix(servo.ee_camera_pose)
