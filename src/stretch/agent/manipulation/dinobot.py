@@ -137,7 +137,7 @@ def extract_3d_coordinates(points, xyz):
     depths = []
     for point in points:
         x, y = point
-        depths.append(xyz[y][x])
+        depths.append(xyz[x][y])
 
     # Create a new array of shape (n, 3) with the 3d coordinates
     # points_3d = []
