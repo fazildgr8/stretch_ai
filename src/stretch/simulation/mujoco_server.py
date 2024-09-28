@@ -631,6 +631,7 @@ def main(
         scene_model = generate_basic_grasp_scene_model(
             object_group=[
                 "mug",
+                "coffee_cup",
             ]
         )
 

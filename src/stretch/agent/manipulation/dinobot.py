@@ -137,15 +137,14 @@ def extract_3d_coordinates(points, xyz):
     depths = []
     for point in points:
         x, y = point
-        depths.append(xyz[y, x, 2])
+        depths.append(xyz[y][x])
 
     # Create a new array of shape (n, 3) with the 3d coordinates
-    points_3d = []
-    for i, point in enumerate(points):
-        x, y = point
-        points_3d.append([x, y, depths[i]])
-
-    breakpoint()
+    # points_3d = []
+    # for i, point in enumerate(points):
+    #     x, y = point
+    #     points_3d.append([x, y, depths[i]])
+    points_3d = np.array(depths)
     return np.array(points_3d)
 
 

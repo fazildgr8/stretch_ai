@@ -84,7 +84,7 @@ class Dinobot:
     And replay a demonstration.
     """
 
-    def __init__(self, model_type: str = "dino_vits8", stride: int = 4):
+    def __init__(self, model_type: str = "dino_vits8", stride: int = 8):
         """
         Initialize the Dinobot class
         Args:
@@ -518,7 +518,7 @@ def rerun_log(robot: RobotClient, T_d405_target: np.ndarray):
 
 
 if __name__ == "__main__":
-    DEBUG = False
+    DEBUG = True
     robot = RobotClient(robot_ip="127.0.0.1")
     dinobot = Dinobot()
     error_threshold = 0.17
@@ -578,5 +578,6 @@ if __name__ == "__main__":
         print("Replaying 3D trajectories...")
         # Replay demonstration
         demo.replay_demo(robot)
+        robot.stop()
     else:
         print(f"Object ID: {track_object_id} not found in the image")
